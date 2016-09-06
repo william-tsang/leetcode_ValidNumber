@@ -25,8 +25,8 @@
         (*(p))?(RET_FALSE):(RET_TRUE);\
     })
 
-/* inter: "01" */    
-#define SKIP_INTER(p, cnt)    ({\
+/* integer: "01" */    
+#define SKIP_INTEGER(p, cnt)    ({\
         cnt = 0;\
         while (('0'<=*(p)) && ('9'>=*(p)))\
         {\
@@ -40,18 +40,18 @@
         if ('.' == *(p))\
         {\
             (p)++;\
-            SKIP_INTER((p), (cnt));\
+            SKIP_INTEGER((p), (cnt));\
             if (cnt)    /* for such as ".0" or "12.12" */\
                 (cnt) ++;\
         }\
         else\
         {\
-            SKIP_INTER((p), (cnt));\
+            SKIP_INTEGER((p), (cnt));\
             if ((cnt) && ('.'==*(p)))\
             {/* for such as "12." or "12.12" */\
                 (p)++;\
                 unsigned int    cnt_t = 0;\
-                SKIP_INTER((p), cnt_t);\
+                SKIP_INTEGER((p), cnt_t);\
                 (cnt) += cnt_t+1;\
             }\
         }\
@@ -80,7 +80,7 @@ bool isNumber(char* s)
         p ++;
         if (('-'==*p) || ('+'==*p))/* for such as "-2.1e+10" or "+2.1e-10" */
             p ++;
-        SKIP_INTER(p, cnt);
+        SKIP_INTEGER(p, cnt);
         if (cnt)
             return BLANK_OR_NULL(p);
     }
